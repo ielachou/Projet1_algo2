@@ -1,0 +1,2 @@
+import achraf
+achraf.suce()
