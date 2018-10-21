@@ -23,4 +23,4 @@ class Tree():
         pass
 
 
-a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1),Tree("e", -1))]),Tree("b",-1, [Tree("f", -1), Tree("g", -2), Tree("h",2)])])
+a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1),Tree("e", -1)]),Tree("b",-1, [Tree("f", -1), Tree("g", -2), Tree("h",2)])])
