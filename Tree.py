@@ -62,15 +62,15 @@ class Tree():
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
         plt.show()
 
-    def setCoord(self, pos, width = 1., dy = 0.2, x = 0.5, y = 0):
-        pos[self.root] = np.array([x,y])
+    def setCoord(self, coord, width = 1., dy = 0.2, x = 0.5, y = 0):
+        coord[self.root] = np.array([x, y])
         if len(self.children) != 0:
             dx = width / len(self.children)
             newx = x - width / 2 - dx / 2
         for i in range(len(self.children)):
             newx+=dx
-            self.children[i].setCoord(pos, width = dx, dy = dy, x = newx, y = y-dy)
-        return pos
+            self.children[i].setCoord(coord, width = dx, dy = dy, x = newx, y =y - dy)
+        return coord
 
 
 a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1,[Tree("i",4),Tree("j", -5, [Tree("l", -1), Tree("m", 3, [Tree("n", 1)])])]),Tree("e", -1)]),Tree("b",-1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h",2)])])
