@@ -33,6 +33,8 @@ class Tree():
             c.printTree(G, a)
         return a
 
+
+
     def printGraph(self):
         G = nx.Graph()
         NodeList = self.printTree(G)
@@ -56,8 +58,8 @@ class Tree():
             custom_node_attrs[node] = attr
         #Draw special pour afficher la valeur avec la possition par rapport au noeud
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
-        plt.show()node_attr
+        plt.show()
 
 
-a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1),Tree("e", -1)]),Tree("b",-1, [Tree("f", -1), Tree("g", -2), Tree("h",2)])])
+a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1,[Tree("i",4),Tree("j", -5, [Tree("l", -1), Tree("m", 3, [Tree("n", 1)])])]),Tree("e", -1)]),Tree("b",-1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h",2)])])
 a.printGraph()
