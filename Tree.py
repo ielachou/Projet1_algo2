@@ -2,13 +2,14 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 class Tree():
-    def __init__(self, root,val, children = []):
+    def __init__(self, root, val, children = []):
         self.root = root
         self.val = val
         #each child is in the list
         self.children = children
         #Sum of all of nodes's values
         self.sum = 0
+        self.graph = nx.Graph()
 
     def getVal(self):
         return self.val
@@ -25,7 +26,8 @@ class Tree():
 
     def printTree(self,G, a =[]):
         print(self.root)
-        a.append(self.root)
+        #On ajoute un tuple dans la liste (noeud, valeur)
+        a.append((self.root,self.val))
         for c in self.children:
             G.add_edge(c.root,self.root)
             c.printTree(G, a)
@@ -35,9 +37,26 @@ class Tree():
         G = nx.Graph()
         NodeList = self.printTree(G)
         print(NodeList)
-        G.add_nodes_from(NodeList)
-        nx.draw(G, with_labels = True)
-        plt.show()
+        for node in NodeList:
+            #ici on lie la valeur et son noeud
+            G.add_node(node[0], val = node[1])
+        #Je sais absolument pas ce que c'est mdr (j'pense ça dessine juste les sommets)
+        plt.figure()
+        pos_nodes = nx.spring_layout(G)
+        nx.draw(G, pos_nodes, with_labels=True)
+        #On va juste prendre les cordonnées pour pouvoir placer le label
+        pos_attrs = {}
+        for node, coords in pos_nodes.items():
+            pos_attrs[node] = (coords[0], coords[1] + 0.05) #Change le 0.05 ou même rajoute une valeur pour l'cordonnées
+            #pour changer la position du label
+        #C'est ici qu'on va associé chaques label à chaques noeud
+        node_attrs = nx.get_node_attributes(G, 'val')
+        custom_node_attrs = {}
+        for node, attr in node_attrs.items():
+            custom_node_attrs[node] = attr
+        #Draw special pour afficher la valeur avec la possition par rapport au noeud
+        nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
+        plt.show()node_attr
 
 
 a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1),Tree("e", -1)]),Tree("b",-1, [Tree("f", -1), Tree("g", -2), Tree("h",2)])])
