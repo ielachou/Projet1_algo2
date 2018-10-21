@@ -9,7 +9,6 @@ class Tree():
         self.children = children
         #Sum of all of nodes's values
         self.sum = 0
-        self.graph = nx.Graph()
 
     def getVal(self):
         return self.val
