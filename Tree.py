@@ -11,6 +11,7 @@ class Tree():
         self.children = children
         #Sum of all of nodes's values
         self.sum = 0
+        self.graph = None
 
     def getVal(self):
         return self.val
@@ -25,8 +26,9 @@ class Tree():
         pass
 
 
+
     def printTree(self,G, a =[]):
-        print(self.root)
+        #print(self.root)
         #On ajoute un tuple dans la liste (noeud, valeur)
         a.append((self.root,self.val))
         for c in self.children:
@@ -38,7 +40,6 @@ class Tree():
     def printGraph(self):
         G = nx.Graph()
         NodeList = self.printTree(G)
-        print(NodeList)
         for node in NodeList:
             #ici on lie la valeur et son noeud
             G.add_node(node[0], val = node[1])
@@ -50,17 +51,17 @@ class Tree():
         #On va juste prendre les cordonnées pour pouvoir placer le label
         pos_attrs = {}
         for node, coords in pos_nodes.items():
-            pos_attrs[node] = (coords[0]+0.05, coords[1] + 0.03) #Change le 0.05 ou même rajoute une valeur pour l'cordonnées
+            pos_attrs[node] = (coords[0]+0.02, coords[1] + 0.04) #Change le 0.05 ou même rajoute une valeur pour l'cordonnées
             #pour changer la position du label
         #C'est ici qu'on va associé chaques label à chaques noeud
         node_attrs = nx.get_node_attributes(G, 'val')
-        print(node_attrs)
         custom_node_attrs = {}
         for node, attr in node_attrs.items():
             custom_node_attrs[node] = attr
         #Draw special pour afficher la valeur avec la possition par rapport au noeud
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
         plt.show()
+
 
     def setCoord(self, coord, width = 1., dy = 0.2, x = 0.5, y = 0):
         coord[self.root] = np.array([x, y])
@@ -73,5 +74,22 @@ class Tree():
         return coord
 
 
+    def max_subtree(self,somme = 0):
+        exsum = somme
+        somme += self.val
+        i = 0
+        while i < len(self.children):
+            if len(self.children[i].children) == 0:
+                if (somme+self.children[i].getVal()) < exsum:
+                    del self.children[i]
+                    i-=1
+            else:
+                self.children[i].max_subtree(somme)
+            i+=1
+
+
 a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1,[Tree("i",4),Tree("j", -5, [Tree("l", -1), Tree("m", 3, [Tree("n", 1)])])]),Tree("e", -1)]),Tree("b",-1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h",2)])])
+
+a.printGraph()
+a.max_subtree()
 a.printGraph()
