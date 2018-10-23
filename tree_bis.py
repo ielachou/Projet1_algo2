@@ -28,22 +28,18 @@ class Tree():
         pass
 
 
-
-    def printTree(self,G, a =[]):
-        #print(self.root)
+    def MakeGraph(self,G =nx.Graph()): #Anciennement PrintTree
+        #print(s)elf.root)
         #On ajoute un tuple dans la liste (noeud, valeur)
-        a.append((self.root,self.val))
+        G.add_node(self.root, val = self.val)
         for c in self.children:
             G.add_edge(c.root,self.root)
-            c.printTree(G, a)
-        return a
+            c.MakeGraph(G)
+        return G
 
 
-    def printGraph(self, G = nx.Graph()):
-        NodeList = self.printTree(G)
-        for node in NodeList:
-            #ici on lie la valeur et son noeud
-            G.add_node(node[0], val = node[1])
+    def printGraph(self):
+        G = self.MakeGraph()
         #Je sais absolument pas ce que c'est mdr (j'pense ça dessine juste les sommets)
         plt.figure()
         pos_nodes = nx.spring_layout(G)
@@ -85,7 +81,7 @@ class Tree():
             if len(self.children[i].children) == 0:
                 if (somme+self.children[i].getVal()) < exsum:
                     print(self.children[i].getRoot())
-                    G.remove_nodes_from(self.children[i].getRoot())
+                    G.remove_node(self.children[i].getRoot())
                     del self.children[i]
                     i-=1
             else:
@@ -99,4 +95,4 @@ a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1,[Tree("i",4),Tree("j", 
 
 a.printGraph()
 G2 = a.max_subtree(a.graph)
-a.printGraph(G2)
+a.printGraph()
