@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
+import copy
 
 class Tree():
 
@@ -90,6 +91,6 @@ class Tree():
 
 a = Tree("r", 2, [Tree("a", -5,[Tree("c", 4),Tree("d",-1,[Tree("i",4),Tree("j", -5, [Tree("l", -1), Tree("m", 3, [Tree("n", 1)])])]),Tree("e", -1)]),Tree("b",-1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h",2)])])
 
-a.printGraph()
-a.max_subtree()
-a.printGraph()
+'''a.printGraph()
+a.max_subtree2()
+a.printGraph()'''
