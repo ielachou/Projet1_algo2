@@ -60,8 +60,7 @@ class Tree():
         plt.figure()
         pos_nodes = nx.spring_layout(G)
         pos_nodes = self.setCoord(pos_nodes)
-        for iso in nx.isolates(G):
-            G.remove_node(iso)
+        G.remove_nodes_from(nx.isolates(G))
         nx.draw(G, pos_nodes, with_labels=True)
         # On va juste prendre les cordonnées pour pouvoir placer le label
         pos_attrs = {}
@@ -135,19 +134,34 @@ def randomTree(nbrBirth = 2, n = 6, val = (-5,5) ):
         children = nodes[i*2:2*i +1]
         tree = Tree(node[0], node[1], children)
         print(tree.getRoot())
-        trees.append(tree)
+
+
 
 
 
 
 a = Tree("r", 2, [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
-    Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
+Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
 
 """
-print(a.get_subSum())
+print(a.get_def randomTree(nbrBirth = 2, n = 6, val = (-5,5) ):
+#3 fils pour 2 pères
+nodes = [("r",randint(val[0], val[1]))]
+for i in range(n-1):
+    nodes.append((chr(97+i),randint(val[0], val[1])))
+    node = nodes.pop(0)
+trees = []
+for node in nodes:
+    nbrChild = nbrBirth
+    children = nodes[i*2:2*i +1]
+    tree = Tree(node[0], node[1], children)
+    print(tree.getRoot())
+    trees.append(tree)subSum())
+"""
 a.printGraph()
 #a.max_subtree2(a.graph)
 a.max_subtree(a.graph)
 a.printGraph()
 """
 randomTree()
+"""
