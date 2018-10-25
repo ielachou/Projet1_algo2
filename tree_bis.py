@@ -19,6 +19,19 @@ class Tree():
     def getSum(self):
         return self.sum
 
+    def get_subSum(self, res = 0):
+        if self.getChildren() == []:
+            res += self.getVal()
+        else:
+            rest = 0
+            for c in self.getChildren():
+                rest += c.get_subSum(res)
+            res+= self.getVal()+rest
+        return res
+
+    def addChild(self, child):
+        self.getChildren().append(child)
+
     def getChildren(self):
         return self.children
 
@@ -36,6 +49,9 @@ class Tree():
             G.add_edge(c.root, self.root)
             c.MakeGraph(G)
         return G
+
+    def __repr__(self):
+        return "Tree de père " + str(self.getRoot())+ " "
 
     def printGraph(self):
         G = self.MakeGraph()
@@ -57,6 +73,10 @@ class Tree():
             custom_node_attrs[node] = attr
         # Draw special pour afficher la valeur avec la possition par rapport au noeud
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
+
+        for iso in nx.isolates(G):
+            G.remove_node(iso)
+
         self.graph = G
         plt.show()
 
@@ -70,18 +90,13 @@ class Tree():
             self.children[i].setCoord(coord, width=dx, dy=dy, x=newx, y=y - dy)
         return coord
 
-    def max_subtree(self, G, somme=0):
+    def max_subtree2(self, G, somme=0):
         a = False
-        exsum = somme
         somme += self.val
         i = 0
         while i < len(self.children):
             if len(self.children[i].children) == 0:
-                if self.children[i].getRoot() == 'c':
-                    print(somme)
-                    print(exsum)
-                    print(somme + self.children[i].getVal())
-                if self.children[i].getVal() < 0 or somme + self.children[i].getVal() < somme:
+                if self.children[i].getVal() < 0 or somme + self.children[i].getVal() <= 0:
                     G.remove_node(self.children[i].getRoot())
                     del self.children[i]
                     i -= 1
@@ -92,10 +107,27 @@ class Tree():
                 self.max_subtree(G, somme)
             i += 1
 
+    def deep_suppr(self):
+        pass
+
+    def max_subtree(self, G):
+        i = 0
+        while i < len(self.getChildren()):
+            self.getChildren()[i].max_subtree(G)
+            if self.getChildren()[i].get_subSum() <= 0:
+                G.remove_node(self.getChildren()[i].getRoot())
+                del self.getChildren()[i]
+                print(self.getChildren())
+                i-=1
+            i+=1
+
 
 a = Tree("r", 2, [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
     Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
 
+
+print(a.get_subSum())
 a.printGraph()
+#a.max_subtree2(a.graph)
 a.max_subtree(a.graph)
 a.printGraph()
