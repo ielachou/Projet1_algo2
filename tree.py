@@ -14,6 +14,9 @@ class Tree():
         self.sum = 0
         self.graph = None
 
+    def add_child(self, tree):
+        self.children.append(tree)
+
     def getVal(self):
         return self.val
 
@@ -118,22 +121,37 @@ class Tree():
             if self.getChildren()[i].get_subSum() <= 0:
                 G.remove_node(self.getChildren()[i].getRoot())
                 del self.getChildren()[i]
-                print(self.getChildren())
+
                 i-=1
             i+=1
 
-def randomTree(nbrBirth = 2, n = 6, val = (-5,5) ):
-    #3 fils pour 2 pères
-    nodes = [("r",randint(val[0], val[1]))]
-    for i in range(n-1):
-        nodes.append((chr(97+i),randint(val[0], val[1])))
-        node = nodes.pop(0)
-    trees = []
-    for node in nodes:
-        nbrChild = nbrBirth
-        children = nodes[i*2:2*i +1]
-        tree = Tree(node[0], node[1], children)
-        print(tree.getRoot())
+def random_tree(random, tree = Tree("r", randint(-5,5)), let= 0):
+    print(random)
+    nb_child = randint(0,3)
+    print(nb_child)
+    if nb_child > random: nb_child = random
+    for i in range(nb_child):
+        tree.add_child(random_tree(random-nb_child,Tree(chr(97+let),randint(-5,5)), let+nb_child))
+
+    return tree
+
+def random_nid(nod):
+    courant = nod
+    s = []
+    taill = 0
+    while taill < 0:
+        a = randint(0,3)
+        if taill+a <9:
+            taill+=a
+            for i in range(a):
+                noeud = Tree(chr(randint(97,122)),randint(-5,5))
+                courant.add_child(noeud)
+                s.insert(0,noeud)
+            if len(s) != 0:
+                courant = s.pop()
+        else:
+            taill = 9
+    return courant
 
 
 
@@ -158,10 +176,16 @@ for node in nodes:
     print(tree.getRoot())
     trees.append(tree)subSum())
 """
+
 a.printGraph()
 #a.max_subtree2(a.graph)
 a.max_subtree(a.graph)
 a.printGraph()
+
 """
 randomTree()
 """
+
+
+"""a = random_nid(Tree("r",randint(-5,5)))
+a.printGraph()"""

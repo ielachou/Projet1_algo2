@@ -72,11 +72,8 @@ class Tree():
         for node, attr in node_attrs.items():
             custom_node_attrs[node] = attr
         # Draw special pour afficher la valeur avec la possition par rapport au noeud
+        G.remove_nodes_from(nx.isolates(G))
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
-
-        for iso in nx.isolates(G):
-            G.remove_node(iso)
-
         self.graph = G
         plt.show()
 
