@@ -9,7 +9,10 @@ class Tree():
         self.root = root
         self.val = val
         # each child is in the list
-        self.children = children
+        if children == []:
+            self.children = []
+        else:
+            self.children = children
         # Sum of all of nodes's values
         self.sum = 0
         self.graph = None
@@ -19,9 +22,6 @@ class Tree():
 
     def getVal(self):
         return self.val
-
-    def getSum(self):
-        return self.sum
 
     def get_subSum(self, res = 0):
         if self.getChildren() == []:
@@ -33,17 +33,11 @@ class Tree():
             res+= self.getVal()+rest
         return res
 
-    def addChild(self, child):
-        self.getChildren().append(child)
-
     def getChildren(self):
         return self.children
 
     def getRoot(self):
         return self.root
-
-    def deepSearch(self):
-        pass
 
     def MakeGraph(self, G=nx.Graph()):  # Anciennement PrintTree
         # print(s)elf.root)
@@ -63,7 +57,7 @@ class Tree():
         plt.figure()
         pos_nodes = nx.spring_layout(G)
         pos_nodes = self.setCoord(pos_nodes)
-        G.remove_nodes_from(nx.isolates(G))
+        G.remove_nodes_from(list(nx.isolates(G)))
         nx.draw(G, pos_nodes, with_labels=True)
         # On va juste prendre les cordonnées pour pouvoir placer le label
         pos_attrs = {}
@@ -94,25 +88,6 @@ class Tree():
             self.children[i].setCoord(coord, width=dx, dy=dy, x=newx, y=y - dy)
         return coord
 
-    def max_subtree2(self, G, somme=0):
-        a = False
-        somme += self.val
-        i = 0
-        while i < len(self.children):
-            if len(self.children[i].children) == 0:
-                if self.children[i].getVal() < 0 or somme + self.children[i].getVal() <= 0:
-                    G.remove_node(self.children[i].getRoot())
-                    del self.children[i]
-                    i -= 1
-                    a = True
-            else:
-                self.children[i].max_subtree(G, somme)
-            if a:
-                self.max_subtree(G, somme)
-            i += 1
-
-    def deep_suppr(self):
-        pass
 
     def max_subtree(self, G):
         i = 0
@@ -125,33 +100,21 @@ class Tree():
                 i-=1
             i+=1
 
-def random_tree(random, tree = Tree("r", randint(-5,5)), let= 0):
-    print(random)
-    nb_child = randint(0,3)
-    print(nb_child)
-    if nb_child > random: nb_child = random
-    for i in range(nb_child):
-        tree.add_child(random_tree(random-nb_child,Tree(chr(97+let),randint(-5,5)), let+nb_child))
+
+def random_tree(tree, n, noms=['r']):
+    if n >0:
+        nbChilds = randint(0,3)
+        if nbChilds == 0 and tree.getRoot() == 'r':
+            nbChilds = randint(1,3)
+        n-=nbChilds
+        for i in range(nbChilds):
+            char = 'r'
+            while char in noms:
+                char = chr(randint(97,122))
+            noms.append(char)
+            tree.add_child(random_tree(Tree(char,randint(-5,5)), n-i-1, noms))
 
     return tree
-
-def random_nid(nod):
-    courant = nod
-    s = []
-    taill = 0
-    while taill < 0:
-        a = randint(0,3)
-        if taill+a <9:
-            taill+=a
-            for i in range(a):
-                noeud = Tree(chr(randint(97,122)),randint(-5,5))
-                courant.add_child(noeud)
-                s.insert(0,noeud)
-            if len(s) != 0:
-                courant = s.pop()
-        else:
-            taill = 9
-    return courant
 
 
 
@@ -176,7 +139,7 @@ for node in nodes:
     print(tree.getRoot())
     trees.append(tree)subSum())
 """
-
+a = random_tree(Tree('r',randint(-5,5)),10)
 a.printGraph()
 #a.max_subtree2(a.graph)
 a.max_subtree(a.graph)
