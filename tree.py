@@ -101,18 +101,20 @@ class Tree():
             i+=1
 
 
-def random_tree(tree, n, noms=['r']):
+def random_tree(tree, n, noms=['r'], c = 97):
     if n >0:
         nbChilds = randint(0,3)
         if nbChilds == 0 and tree.getRoot() == 'r':
             nbChilds = randint(1,3)
         n-=nbChilds
         for i in range(nbChilds):
-            char = 'r'
+            char = chr(c+i)
+            j = 1
             while char in noms:
-                char = chr(randint(97,122))
+                char = chr(c+j+i)
+                j+=1
             noms.append(char)
-            tree.add_child(random_tree(Tree(char,randint(-5,5)), n-i-1, noms))
+            tree.add_child(random_tree(Tree(char,randint(-5,5)), n-i-1, noms, c+i+j))
 
     return tree
 
