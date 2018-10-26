@@ -9,5 +9,5 @@ ex = [[1,0,0,0],
       [0,0,0,0]]
 #test = hg.Hypergraph(ex)
 
-ex2 = hg.randomHypergraph(1,4)
+ex2 = hg.randomHypergraph(7,5)
 hg.Hypergraph(ex2)
