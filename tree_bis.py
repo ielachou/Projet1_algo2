@@ -2,7 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-
+#zizi de aris
 class Tree():
     def __init__(self, root, val, children=[]):
         self.root = root
