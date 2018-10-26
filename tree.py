@@ -27,10 +27,10 @@ class Tree():
         if self.getChildren() == []:
             res += self.getVal()
         else:
-            rest = 0
+            res_t = 0
             for c in self.getChildren():
-                rest += c.get_subSum(res)
-            res+= self.getVal()+rest
+                res_t += c.get_subSum(res)
+            res+= self.getVal()+res_t
         return res
 
     def getChildren(self):
@@ -140,9 +140,11 @@ for node in nodes:
     trees.append(tree)subSum())
 """
 a = random_tree(Tree('r',randint(-5,5)),10)
+print(a.get_subSum())
 a.printGraph()
 #a.max_subtree2(a.graph)
 a.max_subtree(a.graph)
+print(a.get_subSum())
 a.printGraph()
 
 """
