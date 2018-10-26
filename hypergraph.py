@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from random import randint
 import numpy as np
 
 """
@@ -29,16 +30,13 @@ class Hypergraph():
             for j in range(len(M[0])):
                 if M[i][j]:
                     HG.add_edge("v" + str(i+1),"E" + str(j+1))
+        ######################Supprimer les E qui sont pas lié avec un sommet v
         nx.draw(HG, pos_nodes, with_labels = True, node_color = "#61FDD9", node_size = 600)
         print(nx.edges(HG))
         plt.show()
 
-ex = [[1,0,0,0],
-      [1,1,0,0],
-      [1,1,1,0],
-      [0,0,0,1],
-      [0,0,1,0],
-      [0,0,1,0],
-      [0,0,0,0]]
-
-test = Hypergraph(ex)
+def randomHypergraph(v = 0, E = 0):
+    if v == 0 and E == 0:
+        return np.random.randint(2, size=(randint(3,7),(randint(3,7))))
+    else:
+        return np.random.randint(2, size=(v,E))
