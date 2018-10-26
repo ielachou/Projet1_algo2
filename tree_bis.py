@@ -121,6 +121,8 @@ class Tree():
 
 a = Tree("r", 2, [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
     Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
+a2 = Tree("r", 3, [Tree("a", 3, [Tree("d", 1), Tree("e", -5, [Tree("j", 1), Tree("k", 1)])]), Tree("b", -1, [Tree("f", 2),
+Tree("g", -1)]),Tree("c", -2, [Tree("h", 5), Tree("i", -3, [Tree('l', 2)])])])
 
 
 print(a.get_subSum())
