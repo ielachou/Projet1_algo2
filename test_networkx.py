@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
@@ -61,3 +62,18 @@ bprev = Button(axprev, 'Previous')
 bprev.on_clicked(callback.prev)
 
 plt.show()
+=======
+import networkx as nx
+import matplotlib.pyplot as plt
+
+a = nx.Graph()
+a.add_edges_from([(1,2),(2,3), (2,4)])
+
+b = nx.Graph()
+b.add_edges_from([('r','e'),('e','t'),('e','g')])
+
+plt.figure("Initial")
+nx.draw(a)
+nx.draw(b)
+plt.show()
+>>>>>>> 464787694e1464b9d58f4f053bdf5aae9ec759f1

@@ -27,10 +27,10 @@ class Tree():
         if self.getChildren() == []:
             res += self.getVal()
         else:
-            rest = 0
+            res_t = 0
             for c in self.getChildren():
-                rest += c.get_subSum(res)
-            res+= self.getVal()+rest
+                res_t += c.get_subSum(res)
+            res+= self.getVal()+res_t
         return res
 
     def getChildren(self):
@@ -51,12 +51,13 @@ class Tree():
     def __repr__(self):
         return "Tree de père " + str(self.getRoot())+ " "
 
-    def printGraph(self):
+    def printGraph(self, subbed = False):
         G = self.MakeGraph()
         # Je sais absolument pas ce que c'est mdr (j'pense ça dessine juste les sommets)
-        plt.figure()
+        plt.figure(1)
         pos_nodes = nx.spring_layout(G)
-        pos_nodes = self.setCoord(pos_nodes)
+        posy = -1 if subbed else 0
+        pos_nodes = self.setCoord(pos_nodes, y = posy)
         G.remove_nodes_from(list(nx.isolates(G)))
         nx.draw(G, pos_nodes, with_labels=True)
         # On va juste prendre les cordonnées pour pouvoir placer le label
@@ -72,11 +73,7 @@ class Tree():
             custom_node_attrs[node] = attr
         # Draw special pour afficher la valeur avec la possition par rapport au noeud
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
-
-
-
         self.graph = G
-        plt.show()
 
     def setCoord(self, coord, width=1., dy=0.2, x=0.5, y=0):
         coord[self.root] = np.array([x, y])
@@ -143,9 +140,9 @@ for node in nodes:
 """
 a = random_tree(Tree('r',randint(-5,5)),10)
 a.printGraph()
-#a.max_subtree2(a.graph)
 a.max_subtree(a.graph)
-a.printGraph()
+a.printGraph(subbed = True)
+plt.show()
 
 """
 randomTree()
