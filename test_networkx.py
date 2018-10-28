@@ -1,8 +1,8 @@
-<<<<<<< HEAD
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
-
+import networkx as nx
+"""
 
 fig, ax = plt.subplots()
 plt.subplots_adjust(bottom=0.2)
@@ -60,20 +60,9 @@ bnext = Button(axnext, 'Next')
 bnext.on_clicked(callback.next)
 bprev = Button(axprev, 'Previous')
 bprev.on_clicked(callback.prev)
-
+"""
+G = nx.Graph()
+G.add_path([1,2,3,4,1])
+G.add_path([1,5,7,1])
+nx.draw(G)
 plt.show()
-=======
-import networkx as nx
-import matplotlib.pyplot as plt
-
-a = nx.Graph()
-a.add_edges_from([(1,2),(2,3), (2,4)])
-
-b = nx.Graph()
-b.add_edges_from([('r','e'),('e','t'),('e','g')])
-
-plt.figure("Initial")
-nx.draw(a)
-nx.draw(b)
-plt.show()
->>>>>>> 464787694e1464b9d58f4f053bdf5aae9ec759f1
