@@ -14,11 +14,8 @@ def test(n,type = "I"):
 
     elif n == 2: #affichage avec matrice aléatoire
         ex = hg.randomHypergraph()
+        print(ex)
         hg.Hypergraph(ex,type)
 
-    elif n == 3: #affichage graphe primal
-        test = hg.Hypergraph(ex,type)
-
-
-
-test(1,"P")
+if __name__ == '__main__':
+    test(2,"P")

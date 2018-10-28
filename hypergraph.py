@@ -56,26 +56,24 @@ class Hypergraph():
         for i in range(len(M[0])):
             same_edge = []
             for j in range(len(M)):
-                #####OPTIMISER
+                #####OPTIMISER##################################""
                 if not 1 in M[j]:
                     HG.add_node("v" + str(j+1))
                 if M[j][i] == 1:
                     same_edge.append("v" + str(j+1))
-
+            #print(same_edge)
             if len(same_edge) > 1:
                 same_edge.append(same_edge[0])
                 HG.add_path(same_edge)
             elif len(same_edge) == 1:
                 HG.add_node(same_edge[0])
 
-        nx.draw(HG, with_labels = True, node_color = "#6160D9", node_size = 600)
+        nx.draw(HG, with_labels = True, node_color = "#FFFFFF", node_size = 600)
+        print("Cliques : ", list(nx.find_cliques(HG)))
+        print("Chordal ? : ", nx.is_chordal(HG))
+
         plt.show()
         return HG
-
-
-
-
-
 
 
 def randomHypergraph(v = 0, E = 0):
