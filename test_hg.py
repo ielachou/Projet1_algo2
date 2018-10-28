@@ -17,5 +17,6 @@ def test(n,type = "I"):
         ex = hg.randomHypergraph()
         print(ex)
         hg.Hypergraph(ex,type)
+
 if __name__ == '__main__':
     test(1)
