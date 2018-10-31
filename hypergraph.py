@@ -85,7 +85,6 @@ class Hypergraph():
         for i in range(self.edges):
             E_i = "E" + str(i+1)
             curr_edges = incidence.edges(E_i)
-            print("Hyper-arềte : ",curr_edges)
             if len(curr_edges) >= 2:
                 for edge in curr_edges:
                     if E_i not in dic_edge:
@@ -94,16 +93,29 @@ class Hypergraph():
                         dic_edge[E_i].append(edge[1])
 
         print(dic_edge)
-        """
+
         cliques = list(nx.find_cliques(primal))
         res = True
         while len(cliques) != 0:
             clique = cliques.pop()
             if len(clique) >= 2:
-                for node in clique:
-                    for edge in dic_edge:
-                        if node in edge
-        """            
+                clique.sort()
+                #print("pop :", clique)
+
+                finded = False
+
+                for edge in dic_edge:
+                    dic_edge[edge].sort()
+                    if dic_edge[edge] == clique:
+                        finded = True
+                if finded == False:
+                    return finded
+
+        return True
+
+
+
+
     def test_hypertree(self):
         primal = self.primal
 
@@ -111,13 +123,15 @@ class Hypergraph():
 
         print("Cliques : ", list(nx.find_cliques(primal)))
         print("Chordal ? : ", nx.is_chordal(primal))
+        a  = self.checkClique()
+        if nx.is_chordal(primal) and a:
+            print("ok")
 
-        if nx.is_chordal(primal):
-            self.checkClique()
 
-            plt.show()
+            #plt.show()
         else:
-            plt.show()
+            print("pas ok")
+            #plt.show()
             return False
 
     def drawHG(self):
