@@ -1,4 +1,4 @@
-from tree import *
+from Tree import *
 from test_hg import *
 import matplotlib.pyplot as plt
 
