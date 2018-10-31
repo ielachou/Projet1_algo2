@@ -10,10 +10,12 @@ class Hypergraph():
     def __init__(self, M = [[]], type = ""):
 
         self.mat = M
+        self.trans = self.transpo()
         self.nodes = len(M)
         self.edges = len(M[0])
 
         self.incidence = self.incidenceHG()
+        self.dual = self.dualHG()
         self.primal = self.primalHG()
         #self.test_hypertree()
         """
@@ -42,31 +44,56 @@ class Hypergraph():
         j = 0
         for i in range(len(M)):
             HG.add_node("v" + str(i+1))
-            pos_nodes["v" + str(i+1)] = np.array([5, 10 - i])
+            pos_nodes["v" + str(i+1)] = np.array([0, 10 - i])
 
             for j in range(len(M[0])):
                 if M[i][j]:
                     curr_edge = "E" + str(j+1)
                     if curr_edge not in HG.edges():
                         HG.add_node("E" + str(j+1))
-                    pos_nodes["E" + str(j+1)] = np.array([0 , 10 - j])
+                    pos_nodes["E" + str(j+1)] = np.array([5, 10 - j])
                     HG.add_edge("v" + str(i+1),"E" + str(j+1))
         fig = plt.figure("Graphe d'incidence")
-        nx.draw(HG, pos_nodes, with_labels = True, node_color = "#61FDD9", node_size = 600)
+        nx.draw(HG, pos_nodes, with_labels = True, node_color = "#e416ff", node_size = 600)
         return HG
+
+    def dualHG(self):
+
+        M = self.trans
+        HG = nx.Graph()
+
+        pos_nodes = {}
+
+        j = 0
+        for i in range(len(M)):
+            HG.add_node("E" + str(i+1))
+            pos_nodes["E" + str(i+1)] = np.array([0, 10 - i])
+
+            for j in range(len(M[0])):
+                if M[i][j]:
+                    curr_edge = "Ev" + str(j+1)
+                    if curr_edge not in HG.edges():
+                        HG.add_node("Ev" + str(j+1))#Ev
+                    pos_nodes["Ev" + str(j+1)] = np.array([5, 10 - j])#Ev
+                    HG.add_edge("E" + str(i+1),"Ev" + str(j+1))#Ev
+
+        fig = plt.figure("Graphe dual")
+        nx.draw(HG, pos_nodes, with_labels = True, node_color = "#fd16a4", node_size = 600)
+        return HG
+
 
     def primalHG(self):
         HG = nx.Graph()
-        M = self.getMat()
+        M = self.trans
 
         for i in range(len(M[0])):
             same_edge = []
             for j in range(len(M)):
                 #####OPTIMISER##################################
                 if not 1 in M[j]:
-                    HG.add_node("v" + str(j+1))
+                    HG.add_node("Ev" + str(j+1))
                 if M[j][i] == 1:
-                    same_edge.append("v" + str(j+1))
+                    same_edge.append("Ev" + str(j+1))
             #print(same_edge)
             if len(same_edge) > 1:
                 same_edge.append(same_edge[0])
@@ -75,16 +102,16 @@ class Hypergraph():
                 HG.add_node(same_edge[0])
 
         fig = plt.figure("Graphe primal")
-        nx.draw(HG, with_labels = True, node_color = "#FFFFFF", node_size = 600)
+        nx.draw(HG, with_labels = True, node_color = "#6e16fd", node_size = 600)
         return HG
 
     def checkClique(self):
         primal = self.primal
-        incidence = self.incidence
+        dual = self.dual
         dic_edge = {}
         for i in range(self.edges):
             E_i = "E" + str(i+1)
-            curr_edges = incidence.edges(E_i)
+            curr_edges = dual.edges(E_i)
             if len(curr_edges) >= 2:
                 for edge in curr_edges:
                     if E_i not in dic_edge:
@@ -119,8 +146,6 @@ class Hypergraph():
     def test_hypertree(self):
         primal = self.primal
 
-
-
         print("Cliques : ", list(nx.find_cliques(primal)))
         print("Chordal ? : ", nx.is_chordal(primal))
         a  = self.checkClique()
@@ -128,14 +153,23 @@ class Hypergraph():
             print("ok")
 
 
-            #plt.show()
+            plt.show()
         else:
             print("pas ok")
-            #plt.show()
+            plt.show()
             return False
+
+    def transpo(self):
+        M = self.getMat()
+        liste = [[0 for j in range(len(M))] for i in range(len(M[0]))]
+        for j in range(len(liste)):
+            for i in range(len(liste[0])):
+                liste[j][i] = M[i][j]
+        return liste
 
     def drawHG(self):
         plt.show()
+
 
 
 

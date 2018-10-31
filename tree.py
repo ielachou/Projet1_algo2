@@ -123,17 +123,21 @@ def random_tree(tree, n, noms=['r'], c = 97):
 
 
 
-a = Tree("r", 2, [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
-Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1,[Tree("z", 1)])]), Tree("h", 2)])])
 
-a.printGraph()
-a.max_subtree(a.graph)
-a.printGraph(subbed=True)
-plt.show()
-a.graph.clear()
 
-a = random_tree(Tree('r',randint(-5,5)),10)
-a.printGraph()
-a.max_subtree(a.graph)
-a.printGraph(subbed = True)
-plt.show()
+if __name__ == 'main':
+    a = Tree("r", 2,
+             [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
+                 Tree("n", -1)])])]), Tree("e", -1)]),
+              Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1, [Tree("z", 1)])]), Tree("h", 2)])])
+    a.printGraph()
+    a.max_subtree(a.graph)
+    a.printGraph(subbed=True)
+    plt.show()
+    a.graph.clear()
+
+    a = random_tree(Tree('r',randint(-5,5)),10)
+    a.printGraph()
+    a.max_subtree(a.graph)
+    a.printGraph(subbed = True)
+    plt.show()
