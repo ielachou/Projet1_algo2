@@ -53,12 +53,15 @@ class Tree():
 
     def printGraph(self, subbed = False):
         G = self.MakeGraph()
-        # Je sais absolument pas ce que c'est mdr (j'pense ça dessine juste les sommets)
+        #Create a matplot figure window
         plt.figure(1)
         pos_nodes = nx.spring_layout(G)
         posy = -1 if subbed else 0
         pos_nodes = self.setCoord(pos_nodes, y = posy)
-        G.remove_nodes_from(list(nx.isolates(G)))
+        dico_isolated = nx.floyd_warshall(G)['r']
+        for val in dico_isolated:
+            if dico_isolated[val] == float('inf'):
+                G.remove_node(val)
         nx.draw(G, pos_nodes, with_labels=True)
         # On va juste prendre les cordonnées pour pouvoir placer le label
         pos_attrs = {}
@@ -121,33 +124,16 @@ def random_tree(tree, n, noms=['r'], c = 97):
 
 
 a = Tree("r", 2, [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
-Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
+Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1,[Tree("z", 1)])]), Tree("h", 2)])])
 
-"""
-print(a.get_def randomTree(nbrBirth = 2, n = 6, val = (-5,5) ):
-#3 fils pour 2 pères
-nodes = [("r",randint(val[0], val[1]))]
-for i in range(n-1):
-    nodes.append((chr(97+i),randint(val[0], val[1])))
-    node = nodes.pop(0)
-trees = []
-for node in nodes:
-    nbrChild = nbrBirth
-    children = nodes[i*2:2*i +1]
-    tree = Tree(node[0], node[1], children)
-    print(tree.getRoot())
-    trees.append(tree)subSum())
-"""
+a.printGraph()
+a.max_subtree(a.graph)
+a.printGraph(subbed=True)
+plt.show()
+a.graph.clear()
+
 a = random_tree(Tree('r',randint(-5,5)),10)
 a.printGraph()
 a.max_subtree(a.graph)
 a.printGraph(subbed = True)
 plt.show()
-
-"""
-randomTree()
-"""
-
-
-"""a = random_nid(Tree("r",randint(-5,5)))
-a.printGraph()"""
