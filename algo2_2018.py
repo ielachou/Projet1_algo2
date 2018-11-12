@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 def main():
     rep = 0
-    while rep != 3:
-        print("Bienvenue sur le projet d'algo d'Achraf et Iliass !\n")
+    print("Bienvenue sur le projet d'algo d'Achraf et Iliass !\n")
+    while rep != '3':
         print("Sélectionnez la section du projet que vous voulez utiliser : \n"
               "1 : Sous-arbre de poids maximum\n"
               "2 : Les hypergraphes et hypertrees\n"
