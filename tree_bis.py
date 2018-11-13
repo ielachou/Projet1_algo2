@@ -1,23 +1,50 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
 import numpy as np
+from random import randint
 
-#zizi de aris
+class Index(object):
+    ind = 0
+    def __init__(self,listFig):
+        self.fig = listFig # used so yu can access local list, funcs, here
+
+    def next(self, event):
+        self.ind += 1
+        i = self.ind %(len(self.fig))
+        x,y,name = funcs[i]() # unpack tuple data
+        l.set_xdata(x) #set x value data
+        l.set_ydata(y) #set y value data
+        ax.title.set_text(name) # set title of graph
+        plt.draw()
+
+    def prev(self, event):
+        self.ind -= 1
+        i  = self.ind %(len(funcs))
+        x,y, name = funcs[i]() #unpack tuple data
+        l.set_xdata(x) #set x value data
+        l.set_ydata(y) #set y value data
+        ax.title.set_text(name) #set title of graph
+        plt.draw()
+
 class Tree():
     def __init__(self, root, val, children=[]):
         self.root = root
         self.val = val
         # each child is in the list
-        self.children = children
+        if children == []:
+            self.children = []
+        else:
+            self.children = children
         # Sum of all of nodes's values
         self.sum = 0
         self.graph = None
 
+    def add_child(self, tree):
+        self.children.append(tree)
+
     def getVal(self):
         return self.val
-
-    def getSum(self):
-        return self.sum
 
     def get_subSum(self, res = 0):
         if self.getChildren() == []:
@@ -29,17 +56,11 @@ class Tree():
             res+= self.getVal()+rest
         return res
 
-    def addChild(self, child):
-        self.getChildren().append(child)
-
     def getChildren(self):
         return self.children
 
     def getRoot(self):
         return self.root
-
-    def deepSearch(self):
-        pass
 
     def MakeGraph(self, G=nx.Graph()):  # Anciennement PrintTree
         # print(s)elf.root)
@@ -59,6 +80,7 @@ class Tree():
         plt.figure()
         pos_nodes = nx.spring_layout(G)
         pos_nodes = self.setCoord(pos_nodes)
+        G.remove_nodes_from(list(nx.isolates(G)))
         nx.draw(G, pos_nodes, with_labels=True)
         # On va juste prendre les cordonnées pour pouvoir placer le label
         pos_attrs = {}
@@ -72,10 +94,11 @@ class Tree():
         for node, attr in node_attrs.items():
             custom_node_attrs[node] = attr
         # Draw special pour afficher la valeur avec la possition par rapport au noeud
-        G.remove_nodes_from(nx.isolates(G))
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
+
+
+
         self.graph = G
-        plt.show()
 
     def setCoord(self, coord, width=1., dy=0.2, x=0.5, y=0):
         coord[self.root] = np.array([x, y])
@@ -87,25 +110,6 @@ class Tree():
             self.children[i].setCoord(coord, width=dx, dy=dy, x=newx, y=y - dy)
         return coord
 
-    def max_subtree2(self, G, somme=0):
-        a = False
-        somme += self.val
-        i = 0
-        while i < len(self.children):
-            if len(self.children[i].children) == 0:
-                if self.children[i].getVal() < 0 or somme + self.children[i].getVal() <= 0:
-                    G.remove_node(self.children[i].getRoot())
-                    del self.children[i]
-                    i -= 1
-                    a = True
-            else:
-                self.children[i].max_subtree(G, somme)
-            if a:
-                self.max_subtree(G, somme)
-            i += 1
-
-    def deep_suppr(self):
-        pass
 
     def max_subtree(self, G):
         i = 0
@@ -114,19 +118,68 @@ class Tree():
             if self.getChildren()[i].get_subSum() <= 0:
                 G.remove_node(self.getChildren()[i].getRoot())
                 del self.getChildren()[i]
-                print(self.getChildren())
+
                 i-=1
             i+=1
 
 
+def random_tree(tree, n, noms=['r'], c = 97):
+    if n >0:
+        nbChilds = randint(0,3)
+        if nbChilds == 0 and tree.getRoot() == 'r':
+            nbChilds = randint(1,3)
+        n-=nbChilds
+        for i in range(nbChilds):
+            char = chr(c+i)
+            j = 1
+            while char in noms:
+                char = chr(c+j+i)
+                j+=1
+            noms.append(char)
+            tree.add_child(random_tree(Tree(char,randint(-5,5)), n-i-1, noms, c+i+j))
+
+    return tree
+
+
+
+
+
+
 a = Tree("r", 2, [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
-    Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
-a2 = Tree("r", 3, [Tree("a", 3, [Tree("d", 1), Tree("e", -5, [Tree("j", 1), Tree("k", 1)])]), Tree("b", -1, [Tree("f", 2),
-Tree("g", -1)]),Tree("c", -2, [Tree("h", 5), Tree("i", -3, [Tree('l', 2)])])])
+Tree("n", -1)])])]), Tree("e", -1)]), Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
 
-
-print(a.get_subSum())
+"""
+print(a.get_def randomTree(nbrBirth = 2, n = 6, val = (-5,5) ):
+#3 fils pour 2 pères
+nodes = [("r",randint(val[0], val[1]))]
+for i in range(n-1):
+    nodes.append((chr(97+i),randint(val[0], val[1])))
+    node = nodes.pop(0)
+trees = []
+for node in nodes:
+    nbrChild = nbrBirth
+    children = nodes[i*2:2*i +1]
+    tree = Tree(node[0], node[1], children)
+    print(tree.getRoot())
+    trees.append(tree)subSum())
+"""
+callback = Index()
+axprev = plt.axes([0.7, 0.05, 0.1, 0.075])
+axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
+bnext = Button(axnext, 'Next')
+bnext.on_clicked(callback.next)
+bprev = Button(axprev, 'Previous')
+bprev.on_clicked(callback.prev)
+a = random_tree(Tree('r',randint(-5,5)),10)
 a.printGraph()
 #a.max_subtree2(a.graph)
 a.max_subtree(a.graph)
 a.printGraph()
+
+"""
+randomTree()
+"""
+
+
+"""a = random_nid(Tree("r",randint(-5,5)))
+a.printGraph()"""

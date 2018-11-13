@@ -1,0 +1,126 @@
+\documentclass[a4papper]{article}
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[a4paper,landscape,border shrink=5mm]
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\AddThinSpaceBeforeFootnotes 
+\FrenchFootnotes 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\DeclareMathOperator{\arccot}{arccot}
+\usepackage{subcaption}
+\usepackage{graphicx}    
+\usepackage{enumitem}
+\begin{document}
+\begin{titlepage}
+  \textsc{Laamiri Achraf, El Achouchi Iliass}  
+  \vfill
+  
+   \begin{center}
+   
+     \begin{Huge}
+     
+     \rule{0.50\textwidth}{2pt}\\
+     \textsc{\textbf{Rapport : Projet d’Algorithmique 2}}\\
+     \rule{0.50\textwidth}{2pt}\\
+     \end{Huge}
+     
+   \end{center}
+\vfill
+   
+    \begin{tabular}{p{0.5\textwidth}p{0.5\textwidth}}
+    
+    \begin{flushleft}
+    \textsc{Université Libre de Bruxelles\\Science informatique \\ info-F-203}\\
+    \end{flushleft}
+    
+    &\begin{flushright}
+    \textsc{Année accadémique 2018-2019}
+    \end{flushright}
+    \end{tabular}
+\end{titlepage}
+
+
+\section{Arbre}
+	\subsection{Implémentations}
+		\subsubsection{Entrée et Sortie}
+			Tout ce qui est en rapport avec les sorties de ce projet se fera via les librairies \texttt{networkx} et \texttt{matplotlib}. Elles offrent un choix assez large quant à l’affichage et la gestion de graphes, ce qui facilite grandement la partie visualisation du projet.\\
+Par contre les entrées pour cette partie du projet se feront via  l'algorithme de génération aléatoire d’arbre \texttt{random\_tree}.
+		\subsubsection{Affichage}
+			L’exécution de cette partie du projet ouvre une seule et unique fenêtre grâce à la méthode \texttt{show} de \texttt{matplotlib.pyplot}. Elle affiche sur la partie supérieure de la fenêtre l’arbre généré, et juste en dessous l’arbre réduit, conformément à l’énoncé du projet. Cette vue permet de comparer assez facilement l’arbre généré et l’arbre réduit.\\
+			
+Les nœuds de l’arbre sont nommés, ils sont enracinés en « r » et ont chacun une valeur comprise entre -5 et 5 afin de rester raisonnable dans la génération d’arbre aléatoire.\\
+
+Enfin, d’un point de vue purement esthétique, un algorithme qui permet de “balancer” l’arbre a été implémenté, mais il n’est malheureusement pas de nous\footnote{https://stackoverflow.com/questions/29586520/can-one-get-hierarchical-graphs-from-networkx-with-python-3}.\\
+
+			L’objet Tree est un objet récursif, ou chaque fils d’un arbre est lui-même un arbre. 
+L’algorithme demandé, \texttt{max\_subtree}, a été implémenté sous forme de méthode de la classe \texttt{Tree}.
+Il permet d’agir directement sur un objet \texttt{Tree}.\\
+ 
+L’algorithme fonctionne comme cela : Pour chaque fils d’un nœud, il observe si la somme complète de l’arbre (calculée avec la méthode \texttt{get\_subSum} détaillée plus bas) est inférieure ou égale à 0. Dans ce cas, il supprime le nœud et ses enfants s’il y en a. Le résultat sera donc une somme ou l’arbre sera positive ou rien du tout. Dans le cas ou il n’y a pas de sous-arbre positif de poids positif, il n’y a que l’arbre principal qui est affiché.
+Le paramètre G de la méthode permet simplement de gérer l’affichage de \texttt{networkx}, l’algorithme supprime le nœud du graphe \texttt{networkx} au même moment où il supprime le nœud qui fait partie de l’arbre.\\
+
+La méthode \texttt{get\_subSum} est très importante. En effet, elle permet de faire la condition de suppression d’un nœud dans la méthode \texttt{max\_subtree}.
+Le parcours est similaire à \texttt{max\_subtree}, on parcourt chaque fils d’un nœud et on ajoute à une certaine somme la valeur des nœuds enfants. On récupère ainsi la sous somme totale d’un sous-arbre.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{Arbre.png}
+	\caption{Arbre de l'énoncé et son homologue maximisé}
+
+\end{figure}
+		\subsubsection{Fonctions et méthodes}
+			
+			
+	\subsection{Complexité}
+
+\section{Hypergraphe}
+	\subsection{Implémentations}
+		\subsubsection{Entrée et Sortie}
+			En ce qui concerne l'entrée, nous avons opté pour une matrice d'incidence car il était plus simple de schématiser les arrêtes par une valeur booléenne. De plus, il était facile, via la librairie \texttt{Numpy} et sa méthode , de générer des matrices aléatoires, ainsi que pour l'affichage qui sera décrit ce dessous.
+		\subsubsection{Affichage}
+			Nous avons décidé d'afficher le graphe d'incidence, via la matrice d'incidence, le graphe dual, via une simple transposée de la matrice d'incidence et enfin le graphe primal du graphe dual. De cette façon, on pouvais plus facilement afficher toutes les informations du graphe et de les comparer.\\
+
+%afficher la matrice d'incidence ? 
+%mettre des images de graphes
+			
+			Nous avons aussi décidé d'afficher si oui ou non l'hypergraphe est un hypertree. La matrice d'incidence sera aussi montrée.
+			
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.45\linewidth}
+		\includegraphics[width=\linewidth]{graphe_d'incidence.png}
+  		\caption{Graphe d'incidence.}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\includegraphics[width=\linewidth]{graphe_dual.png}
+  		\caption{Graphe dual.}
+  	\end{subfigure}
+  	\begin{subfigure}[b]{0.5\linewidth}
+		\includegraphics[width=\linewidth]{graphe_primal.png}
+  		\caption{Graphe primal.}
+  	\end{subfigure}
+  	\caption{Affichage des différents graphes.}
+\end{figure}
+
+		\subsubsection{Fonctions et méthodes}
+			En ce qui concerne le fonctionnements des méthodes et fonctions de notre implémentation, nous avons essayé de respecter un maximum la mécanique d'encapsulation, via l'utilisation de plusieurs accesseurs et mutateurs dans notre classe \texttt{Hypergraph}.\\
+			
+			Un objet de cette classe prend comme paramètre une matrice d'incidence, et via cette-dernière, va créer sa transposer. Avec ces 2 matrices, on va pouvoir créer les graphes d'incidence, dual et primal.\\
+			
+			Pour pouvoir vérifier si un graphe est un hypertree ou non, nous devons d'abords vérifier si il est cordal. C'est ce que fait exactement la méthode \texttt{is\_chordal} de networkx. Elle prend en paramètre un graphe et retourne un booléen si oui ou non le graphe est cordal. 
+			
+			Si cette condition est vérifié, on va analyser chaque clique maximale donnée par la méthode networkx \texttt{find\_cliques} dans la méthode \texttt{checkClique}. Cette dernière va avant tout créer un dictionnaire des hyperarrêtes avec leurs sommets respectifs, pour ensuite comparer chaque clique maximale avec les sommets des hyperarrêtes. Si toutes les cliques sont présentes dans les hyperarrêtes, alors la méthode renvoie \texttt{True}, et \texttt{False} si non.
+			
+
+	\subsection{Complexité}	
+			
+
+
+\newpage
+\tableofcontents
+
+\end{document}
