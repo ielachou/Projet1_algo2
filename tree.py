@@ -5,7 +5,17 @@ from random import randint
 
 
 class Tree():
+    """
+    Classe Tree qui instancie un arbre récursif, ou chaque noeud est lui même un Tree
+    """
+
     def __init__(self, root, val, children=[]):
+        """
+        Constructeur de tree
+        :param root: nom du Tree
+        :param val: valeur du Tree
+        :param children: Liste des enfants du Tree
+        """
         self.root = root
         self.val = val
         # each child is in the list
@@ -13,51 +23,77 @@ class Tree():
             self.children = []
         else:
             self.children = children
-        # Sum of all of nodes's values
-        self.sum = 0
         self.graph = None
 
-    def add_child(self, tree):
-        self.children.append(tree)
-
     def getVal(self):
+        """
+        Accesseur de la valeur du noeud
+        :return: val
+        """
         return self.val
 
-    def get_subSum(self, res = 0):
-        if self.getChildren() == []:
-            res += self.getVal()
-        else:
-            res_t = 0
-            for c in self.getChildren():
-                res_t += c.get_subSum(res)
-            res+= self.getVal()+res_t
-        return res
-
     def getChildren(self):
+        """
+        Accesseur de la liste des enfants d'un Tree
+        :return: children
+        """
         return self.children
 
     def getRoot(self):
+        """
+        Accesseur du nom du noeud correspondant au Tree
+        :return: root
+        """
         return self.root
 
-    def MakeGraph(self, G=nx.Graph()):  # Anciennement PrintTree
-        # print(s)elf.root)
-        # On ajoute un tuple dans la liste (noeud, valeur)
+    def add_child(self, tree):
+        """
+        Ajoute un enfant à la liste des enfants du Tree
+        :param tree: enfant à rajouter à l'objet Tree
+        :return: Rien
+        """
+        self.children.append(tree)
+
+    def get_subSum(self, res=0):
+        """
+        Algorithme calculant la somme des poids totaux d'un Tree, en effectuant un parcours en profondeur
+        :param res: somme
+        :return: somme des poids totaux d'un Tree
+        """
+        if self.getChildren() == []:
+            res += self.getVal()
+        else:
+            res_t = 0  # Somme temporaire afin de l'ajouter totalement à res plus tard
+            for c in self.getChildren():
+                res_t += c.get_subSum(res)
+            res += self.getVal() + res_t
+        return res
+
+    def MakeGraph(self, G=nx.Graph()):
+        """
+        Methode récursive qui crée le graphe networkx correspondant à un Tree
+        :param G: Graphe networkx
+        :return: Graphe du Tree
+        """
+        # On ajoute un tuple dans la liste (noeud, valeur), va permettre à l'affichage
         G.add_node(self.root, val=self.val)
         for c in self.children:
             G.add_edge(c.root, self.root)
             c.MakeGraph(G)
         return G
 
-    def __repr__(self):
-        return "Tree de père " + str(self.getRoot())+ " "
-
-    def printGraph(self, subbed = False):
+    def printGraph(self, subbed=False):
+        """
+        Méthode dessinant le graphe un Tree correctement, la valeur de ses noeuds, le nom des noeuds, ...
+        :param subbed: True si on veut afficher l'arbre réduit, va décaler les coordonnées.
+        :return: Rien
+        """
         G = self.MakeGraph()
-        #Create a matplot figure window
+        # Crée une figure (fenêtre) matplot où sera affiché le graphe
         plt.figure(1)
         pos_nodes = nx.spring_layout(G)
-        posy = -1 if subbed else 0
-        pos_nodes = self.setCoord(pos_nodes, y = posy)
+        posy = -1 if subbed else 0 #modifie la position en fonction de si on veut afficher l'arbre réduit ou l'initial
+        pos_nodes = self.setCoord(pos_nodes, y=posy)
         dico_isolated = nx.floyd_warshall(G)['r']
         for val in dico_isolated:
             if dico_isolated[val] == float('inf'):
@@ -66,19 +102,30 @@ class Tree():
         # On va juste prendre les cordonnées pour pouvoir placer le label
         pos_attrs = {}
         for node, coords in pos_nodes.items():
-            pos_attrs[node] = (
-                coords[0] + 0.02, coords[1] + 0.04)  # Change le 0.05 ou même rajoute une valeur pour l'cordonnées
+            pos_attrs[node] = (coords[0] + 0.02, coords[1] + 0.04)
             # pour changer la position du label
         # C'est ici qu'on va associé chaques label à chaques noeud
         node_attrs = nx.get_node_attributes(G, 'val')
         custom_node_attrs = {}
         for node, attr in node_attrs.items():
             custom_node_attrs[node] = attr
-        # Draw special pour afficher la valeur avec la possition par rapport au noeud
+        # Draw special pour afficher la valeur avec la position par rapport au noeud
         nx.draw_networkx_labels(G, pos_attrs, labels=custom_node_attrs)
         self.graph = G
 
+
     def setCoord(self, coord, width=1., dy=0.2, x=0.5, y=0):
+        """
+        Méthode qui va permettre un affichage "clean" de l'arbre sous forme d'arbre balancé et égalisé.
+        Inspiré de
+        https://stackoverflow.com/questions/29586520/can-one-get-hierarchical-graphs-from-networkx-with-python-3
+        :param coord: dictionnaire des positions en fonction du noeud
+        :param width: écart horizontal entre deux noeuds de même degré
+        :param dy: écart vertical entre un père et son fils
+        :param x: abscisse initiale d'un Tree "père"
+        :param y: ordonnée initiale d'un Tree "père"
+        :return: coord, dictionnaire des positions modifiées
+        """
         coord[self.root] = np.array([x, y])
         if len(self.children) != 0:
             dx = width / len(self.children)
@@ -88,8 +135,12 @@ class Tree():
             self.children[i].setCoord(coord, width=dx, dy=dy, x=newx, y=y - dy)
         return coord
 
-
     def max_subtree(self, G):
+        """
+        Algorithme principal demandé. Supprime des noeuds s'il considère qu'ils ne contribuent au score max du Tree
+        :param G: graphe networkx utilisé pour l'affichage
+        :return: Rien
+        """
         i = 0
         while i < len(self.getChildren()):
             self.getChildren()[i].max_subtree(G)
@@ -97,47 +148,47 @@ class Tree():
                 G.remove_node(self.getChildren()[i].getRoot())
                 del self.getChildren()[i]
 
-                i-=1
-            i+=1
+                i -= 1
+            i += 1
 
 
-def random_tree(tree, n, noms=['r'], c = 97):
-    if n >0:
-        nbChilds = randint(0,3)
-        if nbChilds == 0 and tree.getRoot() == 'r':
-            nbChilds = randint(1,3)
-        n-=nbChilds
+def random_tree(tree, n, noms=['r'], c=97):
+    """
+    Algorithme générateur d'arbre aléatoires avec chaque Tree qui a max 3 fils
+    :param tree: Tree parent, va être initialisé avec tree = Tree("r", randint(-5,5))
+    :param n: variable qui va permettre de limiter le nombre de noeuds à l'arbre
+    :param noms: liste contenant les caractères déjà utilisés pour nommer un noeud, pour éviter les doublons
+    :param c: caractère actuel pour nommer un noeud
+    :return: Tree random avec des valeurs entre -5 et 5
+    """
+    if n > 0:
+        nbChilds = randint(0, 3)
+        if nbChilds == 0 and tree.getRoot() == 'r': #Fais en sorte d'avoir au moins un fils au noeud r
+            nbChilds = randint(1, 3)
+        n -= nbChilds
         for i in range(nbChilds):
-            char = chr(c+i)
+            char = chr(c + i)
             j = 1
             while char in noms:
-                char = chr(c+j+i)
-                j+=1
+                char = chr(c + j + i)
+                j += 1
             noms.append(char)
-            tree.add_child(random_tree(Tree(char,randint(-5,5)), n-i-1, noms, c+i+j))
+            tree.add_child(random_tree(Tree(char, randint(-5, 5)), n - i - 1, noms, c + i + j))
 
     return tree
 
 
+def execute(tree):
+    """
+    affiche un Tree, son arbre réduit, et leurs poids respectifs
+    :param tree: tree a réduire
+    :return: Rien
+    """
+    tree.printGraph()
+    print("Somme de l'arbre initial : " + str(tree.get_subSum()))
+    tree.max_subtree(tree.graph)
+    tree.printGraph(subbed=True)
+    print("Somme de l'arbre réduit : " + str(tree.get_subSum()))
 
-
-
-
-
-
-if __name__ == 'main':
-    a = Tree("r", 2,
-             [Tree("a", -5, [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
-                 Tree("n", -1)])])]), Tree("e", -1)]),
-              Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1, [Tree("z", 1)])]), Tree("h", 2)])])
-    a.printGraph()
-    a.max_subtree(a.graph)
-    a.printGraph(subbed=True)
     plt.show()
-    a.graph.clear()
-
-    a = random_tree(Tree('r',randint(-5,5)),10)
-    a.printGraph()
-    a.max_subtree(a.graph)
-    a.printGraph(subbed = True)
-    plt.show()
+    tree.graph.clear() #Efface le graphe networkx pour éviter les incohérences entre deux Tree
