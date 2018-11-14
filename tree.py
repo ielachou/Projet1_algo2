@@ -26,6 +26,9 @@ class Tree():
             self.children = children
         self.graph = None
 
+    def setVal(self, val):
+        self.val = val
+
     def getVal(self):
         """
         Accesseur de la valeur du noeud
@@ -76,7 +79,7 @@ class Tree():
         """
         G = self.MakeGraph()
         # Crée une figure (fenêtre) matplot où sera affiché le graphe
-        plt.figure("Roubignoles")
+        plt.figure("Sous arbre de poids maximum")
         pos_nodes = nx.spring_layout(G)
         posy = -1 if subbed else 0 #modifie la position en fonction de si on veut afficher l'arbre réduit ou l'initial
         pos_nodes = self.setCoord(pos_nodes, y=posy)
@@ -84,6 +87,9 @@ class Tree():
         for val in dico_isolated:
             if dico_isolated[val] == float('inf'):
                 G.remove_node(val)
+        if self.getChildren() == [] and self.getVal() <= 0:
+            G.remove_node("r")
+            self.setVal(0)
         nx.draw(G, pos_nodes, with_labels=True)
         # On va juste prendre les cordonnées pour pouvoir placer le label
         pos_attrs = {}
@@ -154,7 +160,7 @@ class Tree():
                 i -= 1 #O(1)
             i += 1 #O(1)
 
-def random_tree(tree, n, noms=['r'], c=97):
+def random_tree(tree, n, noms, c=97):
     """
     Algorithme générateur d'arbre aléatoires avec chaque Tree qui a max 3 fils
     :param tree: Tree parent, va être initialisé avec tree = Tree("r", randint(-5,5))
@@ -190,7 +196,10 @@ def execute(tree):
     print("Somme de l'arbre initial : " + str(tree.get_subSum()))
     tree.max_subtree(tree.graph)
     tree.printGraph(subbed=True)
-    print("Somme de l'arbre réduit : " + str(tree.get_subSum()))
+    sum = tree.get_subSum()
+    if sum <= 0:
+        sum = "L'arbre enraciné en r n'a pas de sous arbre positif"
+    print("Somme de l'arbre réduit : " + str(sum))
 
     plt.show()
     tree.graph.clear() #Efface le graphe networkx pour éviter les incohérences entre deux Tree
