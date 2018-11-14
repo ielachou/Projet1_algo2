@@ -17,6 +17,7 @@ def main():
             if rep not in ["1", "2", "3"]:
                 print("Entrez 1, 2 ou 3 !")
         if rep == "1":
+            print("1) ")
             a = Tree("r", 2,
                      [Tree("a", -5,
                            [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [

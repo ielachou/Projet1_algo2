@@ -116,51 +116,52 @@ class Hypergraph():
         nx.draw(HG, with_labels = True, node_color = "#6e16fd", node_size = 600)
         return HG
 
-    def checkClique(self):
-        primal = self.getPrimal()
-        dual = self.getDual()
-        dic_edge = {}
-        for i in range(self.getNbrEdges()):
-            E_i = "E" + str(i+1)
-            curr_edges = dual.edges(E_i)
-            if len(curr_edges) >= 2:
-                for edge in curr_edges:
-                    if E_i not in dic_edge:
-                        dic_edge[E_i] = [edge[1]]
+    def checkClique(self): #O(m²n²)
+        primal = self.getPrimal() #O(1)
+        dual = self.getDual() #O(1)
+        dic_edge = {} #O(1)
+        for i in range(self.getNbrEdges()): #O(m)
+            E_i = "E" + str(i+1) #O(1)
+            curr_edges = dual.edges(E_i) #O(1)
+            if len(curr_edges) >= 2: #0(1)
+                for edge in curr_edges: #O(m)
+                    if E_i not in dic_edge: #O(n)
+                        dic_edge[E_i] = [edge[1]] #O(1)
                     else:
-                        dic_edge[E_i].append(edge[1])
+                        dic_edge[E_i].append(edge[1]) #O(n)
 
         print(dic_edge)
 
-        cliques = list(nx.find_cliques(primal))
-        res = True
-        finded = False
-        while len(cliques) != 0:
-            clique = cliques.pop()
-            if len(clique) >= 2:
-                clique.sort()
+        cliques = list(nx.find_cliques(primal)) #O(3^(n/3))
+        finded = False #O(1)
+        #O(l²m²log(m)log(l))
+        while len(cliques) != 0: #O(l) l = nombre de cliques
+            clique = cliques.pop() #O(1)
+            if len(clique) >= 2: #O(1)
+                clique.sort() #O(l log l)
 
-                finded = False
+                finded = False #O(1)
 
-                for edge in dic_edge:
-                    dic_edge[edge].sort()
-                    if dic_edge[edge] == clique:
-                        finded = True
-                if finded == False:
-                    return False
+                #O(m²log(m))
+                for edge in dic_edge: #O(m)
+                    dic_edge[edge].sort() #O(m log m)
+                    if dic_edge[edge] == clique: #O(1)
+                        finded = True #O(1)
+                if finded == False: #O(1)
+                    return False #O(1)
 
         return finded
 
 
 
-
+    #O(m²n²)
     def test_hypertree(self):
         primal = self.getPrimal()
 
         print("Cliques : ", list(nx.find_cliques(primal)))
         print("Chordal ? : ", nx.is_chordal(primal))
-        isClique  = self.checkClique()
-        isChodal = nx.is_chordal(primal)
+        isClique  = self.checkClique() #O(m²n²)
+        isChodal = nx.is_chordal(primal) #O(m*n)
         if isChodal and isClique:
             plt.show()
             return True
@@ -168,6 +169,7 @@ class Hypergraph():
             plt.show()
             return False
 
+    #O(m*n)
     def transpo(self):
         M = self.getMat()
         liste = [[0 for j in range(len(M))] for i in range(len(M[0]))]
