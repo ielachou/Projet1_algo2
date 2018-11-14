@@ -1,4 +1,4 @@
-from tree import *
+from Tree import *
 from test_hg import *
 import matplotlib.pyplot as plt
 
@@ -23,13 +23,11 @@ def main():
             while rep2 not in ["1", "2"]:
                 rep2 = input("Entrez 1 ou 2 ! \n")
             if rep2 == "1":
-                """a = Tree("r", 2,
+                a = Tree("r", 2,
                          [Tree("a", -5,
                                [Tree("c", 4), Tree("d", -1, [Tree("i", 4), Tree("j", -5, [Tree("l", -1), Tree("m", 3, [
                                    Tree("n", -1)])])]), Tree("e", -1)]),
-                          Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])"""
-
-                a = Tree("r", -5, [Tree("b", -8)])
+                          Tree("b", -1, [Tree("f", -1), Tree("g", -2, [Tree("k", 1)]), Tree("h", 2)])])
                 print("Exemple de l'énoncé, fermez la fenêtre pour accéder à la suite.")
                 execute(a)
             else:
