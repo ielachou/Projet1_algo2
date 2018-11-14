@@ -12,11 +12,17 @@ class Hypergraph():
         self.mat = M
         self.trans = self.transpo()
 
+        self.nodes = len(M)
+        self.edges = len(M[0])
+
         self.incidence = self.incidenceHG()
         self.dual = self.dualHG()
         self.primal = self.primalHG()
 
     #simple getter et setter
+    def getNbrEdges(self):
+        return self.edges
+
     def getMat(self):
         return self.mat
 
@@ -52,7 +58,7 @@ class Hypergraph():
 
             for j in range(len(M[0])):
                 #même chose qu'en haut, on va créer l'hyperarrête si il y a au
-                #moins un lien avec 
+                #moins un lien avec
                 if M[i][j]:
                     curr_edge = "E" + str(j+1)
                     if curr_edge not in HG.edges():
@@ -114,7 +120,7 @@ class Hypergraph():
         primal = self.getPrimal()
         dual = self.getDual()
         dic_edge = {}
-        for i in range(self.edges):
+        for i in range(self.getNbrEdges()):
             E_i = "E" + str(i+1)
             curr_edges = dual.edges(E_i)
             if len(curr_edges) >= 2:
@@ -156,11 +162,9 @@ class Hypergraph():
         isClique  = self.checkClique()
         isChodal = nx.is_chordal(primal)
         if isChodal and isClique:
-            print("L'hypergraphe est un hypertree")
             plt.show()
             return True
         else:
-            print("L'hypergraphe n'est pas un hypertree")
             plt.show()
             return False
 

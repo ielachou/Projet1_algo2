@@ -69,24 +69,40 @@ Le parcours est similaire à \texttt{max\_subtree}, on parcourt chaque fils d’
 	\centering
 	\includegraphics[width=\linewidth]{Arbre.png}
 	\caption{Arbre de l'énoncé et son homologue maximisé}
-
 \end{figure}
 		\subsubsection{Fonctions et méthodes}
 			
 			
 	\subsection{Complexité}
-
+		\subsubsection{\texttt{get\_subSum}}
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{get_subSum.png}
+				\caption{Fonction \texttt{get\_subSum}.}
+			\end{figure}	
+		
+			Pour cette fonction, la ligne 8 et 9 sont en $O(1)$ car on appelle un accesseur et on effectue une somme. Même chose pour la ligne 14. En ce qui concerne la boucle à la ligne 12, la ligne 13 est en $O(m)$ ou $m$ est le nombre de nœuds dans l'arbre car on va l'appliquer sur tous les nœuds de l'arbre. Enfin, la boucle est en $O(m)$ où $m$ est le nombre de nœud de l'arbre complet. 
+		\subsubsection{\texttt{max\_subtree}}
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\linewidth]{max_subtree.png}
+				\caption{Fonction \texttt{max\_subtree}.}
+			\end{figure}
+			
+			Cette fonction récursive a des instructions de $O(1)$ à la ligne 8, 15 et 16. À la ligne 13, nous avons cependant une complexité en $O(n)$ car la suppression d'un valeur dans une liste demande de réécrire toute la liste sans l'élément supprimé. Pour l'instruction \texttt{if} à la ligne 11, la complexité maximale est en $O(m)$ car c'est la complexité de la fonction \texttt{get\_subSum} calculée plus haut. En ce qui concerne celle de l'instruction de la ligne 10, nous avons déduit que le nombre d'appel de la fonction récursive est en $O(n*m)$ où $n$ est le nombre de fils.\\
+			
+			Nous pouvons enfin dire que la complexité maximale finale de la fonction est de $O(n*m)$. Néanmoins, nous pensons que la complexité est légèrement inférieure à cette valeur, car comme le montre la ligne 13, le nombre de fils varie, et donc par la même occasion le nombre de nœuds. Il ne faut pas non plus oublier que dans notre cas, les valeurs $m$ et $n$ sont assez petite. Elles varient entre 0 et 15, et 0 et 3 respectivement.
 \section{Hypergraphe}
 	\subsection{Implémentations}
 		\subsubsection{Entrée et Sortie}
-			En ce qui concerne l'entrée, nous avons opté pour une matrice d'incidence car il était plus simple de schématiser les arrêtes par une valeur booléenne. De plus, il était facile, via la librairie \texttt{Numpy} et sa méthode , de générer des matrices aléatoires, ainsi que pour l'affichage qui sera décrit ce dessous.
+			En ce qui concerne l'entrée, nous avons opté pour une matrice d'incidence car il était plus simple de schématiser les arrêtes par une valeur booléenne. De plus, il était facile, via la librairie \texttt{Numpy} et sa méthode !!!random!!!, de générer des matrices aléatoires, ainsi que pour l'affichage qui sera décrit ci-dessous.
 		\subsubsection{Affichage}
-			Nous avons décidé d'afficher le graphe d'incidence, via la matrice d'incidence, le graphe dual, via une simple transposée de la matrice d'incidence et enfin le graphe primal du graphe dual. De cette façon, on pouvais plus facilement afficher toutes les informations du graphe et de les comparer.\\
+			Nous avons décidé d'afficher le graphe d'incidence, via la matrice d'incidence, le graphe dual, via une simple transposée de la matrice d'incidence et enfin le graphe primal du graphe dual. De cette façon, nous pouvons afficher plus facilement toutes les informations du graphe et de les comparer.\\
 
 %afficher la matrice d'incidence ? 
 %mettre des images de graphes
 			
-			Nous avons aussi décidé d'afficher si oui ou non l'hypergraphe est un hypertree. La matrice d'incidence sera aussi montrée.
+			Le terminal indiquera finalement si l'hypergraphe est un hypertree comme demandé. La matrice d'incidence est également affichée.
 			
 
 \begin{figure}[h!]
@@ -107,13 +123,13 @@ Le parcours est similaire à \texttt{max\_subtree}, on parcourt chaque fils d’
 \end{figure}
 
 		\subsubsection{Fonctions et méthodes}
-			En ce qui concerne le fonctionnements des méthodes et fonctions de notre implémentation, nous avons essayé de respecter un maximum la mécanique d'encapsulation, via l'utilisation de plusieurs accesseurs et mutateurs dans notre classe \texttt{Hypergraph}.\\
+			En ce qui concerne le fonctionnement des méthodes et fonctions de notre implémentation, nous avons essayé de respecter un maximum la mécanique d'encapsulation, via l'utilisation de plusieurs accesseurs et mutateurs dans notre classe \texttt{Hypergraph}.\\
 			
-			Un objet de cette classe prend comme paramètre une matrice d'incidence, et via cette-dernière, va créer sa transposer. Avec ces 2 matrices, on va pouvoir créer les graphes d'incidence, dual et primal.\\
+			Un objet de cette classe prend comme paramètre une matrice d'incidence, et via cette-dernière, va créer sa transposée. Avec ces 2 matrices, les graphes dual, primal et d'incidence seront créés.\\
 			
-			Pour pouvoir vérifier si un graphe est un hypertree ou non, nous devons d'abords vérifier si il est cordal. C'est ce que fait exactement la méthode \texttt{is\_chordal} de networkx. Elle prend en paramètre un graphe et retourne un booléen si oui ou non le graphe est cordal. 
+			Pour pouvoir vérifier si un graphe est un hypertree ou non, nous devons tout d'abord vérifier s'il est cordal ou non. C'est ce que fait exactement la méthode \texttt{is\_chordal} de \texttt{networkx}. Elle prend en paramètre un graphe et retourne un booléen si oui ou non le graphe est cordal. 
 			
-			Si cette condition est vérifié, on va analyser chaque clique maximale donnée par la méthode networkx \texttt{find\_cliques} dans la méthode \texttt{checkClique}. Cette dernière va avant tout créer un dictionnaire des hyperarrêtes avec leurs sommets respectifs, pour ensuite comparer chaque clique maximale avec les sommets des hyperarrêtes. Si toutes les cliques sont présentes dans les hyperarrêtes, alors la méthode renvoie \texttt{True}, et \texttt{False} si non.
+			Si cette condition est vérifiée, on va analyser chaque clique maximale donnée par la méthode networkx \texttt{find\_cliques} dans la méthode \texttt{checkClique}. Cette dernière va avant tout créer un dictionnaire des hyperarêtes avec leurs sommets respectifs, pour ensuite comparer chaque clique maximale avec les sommets des hyperarrêtes. Si toutes les cliques sont présentes dans les hyperarêtes, alors la méthode renvoie \texttt{True}, et \texttt{False} sinon.
 			
 
 	\subsection{Complexité}	
