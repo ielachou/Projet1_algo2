@@ -2,6 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 from random import randint
+import time
 
 
 class Tree():
@@ -54,21 +55,6 @@ class Tree():
         """
         self.children.append(tree)
 
-    def get_subSum(self, res=0):
-        """
-        Algorithme calculant la somme des poids totaux d'un Tree, en effectuant un parcours en profondeur
-        :param res: somme
-        :return: somme des poids totaux d'un Tree
-        """
-        if self.getChildren() == []:
-            res += self.getVal()
-        else:
-            res_t = 0  # Somme temporaire afin de l'ajouter totalement à res plus tard
-            for c in self.getChildren():
-                res_t += c.get_subSum(res)
-            res += self.getVal() + res_t
-        return res
-
     def MakeGraph(self, G=nx.Graph()):
         """
         Methode récursive qui crée le graphe networkx correspondant à un Tree
@@ -90,7 +76,7 @@ class Tree():
         """
         G = self.MakeGraph()
         # Crée une figure (fenêtre) matplot où sera affiché le graphe
-        plt.figure(1)
+        plt.figure("Roubignoles")
         pos_nodes = nx.spring_layout(G)
         posy = -1 if subbed else 0 #modifie la position en fonction de si on veut afficher l'arbre réduit ou l'initial
         pos_nodes = self.setCoord(pos_nodes, y=posy)
@@ -135,22 +121,38 @@ class Tree():
             self.children[i].setCoord(coord, width=dx, dy=dy, x=newx, y=y - dy)
         return coord
 
+    def get_subSum(self, res=0):
+        """
+        Algorithme calculant la somme des poids totaux d'un Tree, en effectuant un parcours en profondeur
+        Complexité : O(m)
+        :param res: somme
+        :return: somme des poids totaux d'un Tree
+        """
+        if self.getChildren() == []: #O(1)
+            res += self.getVal() #0(1)
+        else:
+            res_t = 0  # Somme temporaire afin de l'ajouter totalement à res plus tard #O(1)
+            for c in self.getChildren(): #O(m)
+                res_t += c.get_subSum(res) #O(m = nombre de noeuds de l'arbre)
+            res += self.getVal() + res_t #O(1)
+        return res #0(1)
+
     def max_subtree(self, G):
         """
         Algorithme principal demandé. Supprime des noeuds s'il considère qu'ils ne contribuent au score max du Tree
+        Complexité O(n*m)
         :param G: graphe networkx utilisé pour l'affichage
         :return: Rien
         """
-        i = 0
-        while i < len(self.getChildren()):
-            self.getChildren()[i].max_subtree(G)
-            if self.getChildren()[i].get_subSum() <= 0:
+        i = 0 #O(1)
+        while i < len(self.getChildren()): #O(n*m)
+            self.getChildren()[i].max_subtree(G) #O(n*m)
+            if self.getChildren()[i].get_subSum() <= 0:#O(m)
                 G.remove_node(self.getChildren()[i].getRoot())
-                del self.getChildren()[i]
+                del self.getChildren()[i] #O(n)
 
-                i -= 1
-            i += 1
-
+                i -= 1 #O(1)
+            i += 1 #O(1)
 
 def random_tree(tree, n, noms=['r'], c=97):
     """

@@ -12,6 +12,8 @@ class Hypergraph():
         self.mat = M
         self.trans = self.transpo()
 
+        self.nodes = len(M)
+        self.edges = len(M[0])
         self.incidence = self.incidenceHG()
         self.dual = self.dualHG()
         self.primal = self.primalHG()
@@ -111,10 +113,10 @@ class Hypergraph():
         return HG
 
     def checkClique(self):
-        primal = self.getPrimal()
-        dual = self.getDual()
-        dic_edge = {}
-        for i in range(self.edges):
+        primal = self.getPrimal() #O(1)
+        dual = self.getDual() #O(1)
+        dic_edge = {} #O(1)
+        for i in range(self.getEdges): #
             E_i = "E" + str(i+1)
             curr_edges = dual.edges(E_i)
             if len(curr_edges) >= 2:
